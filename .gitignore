@@ -22,3 +22,28 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Python venv
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Node packages
+node_modules/
+dist/
+
+# VSCode
+.vscode/
+
+# environment files
+*.env
+
+# OS junk
+.DS_Store
+Thumbs.db
