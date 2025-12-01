@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# Immigration Rights Awareness Website 🌎
+## A simple full-stack starter 
+-**Frontend**: React (Vite) for a clean, fast UI
+-**Backend**: Django + Django REST Framework for APIs
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Mission Statement
 
-Currently, two official plugins are available:
+This website was created to serve as a **one-stop hub for all immigration news and needs**.
+The idea came from the reality that many Hispanic families live in fear and confusion due to the current political climate.
+This project is deeply personal — it comes from someone who suffered firsthand from government actions that led to the **deportation and medical neglect of my father**, leaving him blind and scared in a detention center.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Our mission is to **inform, connect, and protect** immigrant communities by providing clear, trustworthy, and bilingual resources.
 
-## React Compiler
+## Website Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The Immigration Rights Awareness site has **three main sections**, designed to guide users through critical immigration topics:
 
-## Expanding the ESLint configuration
+### 1. 🏛️ Legal
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Find everything you need in one place:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* Detention documents and guidance
+* How to locate a detained loved one
+* Verified immigration lawyers and legal aid organizations
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 2. 📰 News
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Stay informed with a continuous **reel-style feed** of verified immigration news:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+* Policy updates
+* Border and DACA news
+* Local stories and community voices
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 3. 🤝 Community & Activities
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+A space for empowerment through action:
+
+* Fundraisers and community aid
+* Peaceful protests and advocacy events
+* “Know Your Rights” workshops and volunteer opportunities
+
+## Technical Summary
+
+This is a **CRUD-based bilingual website**, meaning users and verified advocates can:
+
+* **Create** posts about legal help, news, and events
+* **Read** reliable, translated information
+* **Update** and translate outdated posts
+* **Delete** expired or unsafe content
+
+Built for accessibility, community safety, and long-term trust.
+
+
+## Vision
+
+To make immigration knowledge, safety, and unity **accessible to every family** — no matter their language, status, or fear.
