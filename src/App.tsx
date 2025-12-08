@@ -1,39 +1,42 @@
-import './App.css'
+import './App.css';
+import { useTheme } from './ThemeContext';
 
 type Widget = {
-  title: string
-  description: string
-  badge: string
-  link: string
-}
+  title: string;
+  description: string;
+  badge: string;
+  link: string;
+};
 
 function App() {
+  const { theme, setTheme } = useTheme();
+
   const widgets: Widget[] = [
     {
       title: 'Legal Resources',
       description:
         'Access guides, forms, and links to trusted legal aid organizations to help you navigate the immigration process.',
       badge: 'Guides & Forms',
-      link: '#', // later you can turn this into /legal-resources
+      link: '#',
     },
     {
       title: 'News & Policy Updates',
       description:
         'Stay informed about immigration news, policy changes, and community stories that may affect you and your family.',
       badge: 'News',
-      link: '#', // later: /news
+      link: '#',
     },
     {
       title: 'Community Support',
       description:
         'Find local events, workshops, and support networks focused on immigrant rights and community empowerment.',
       badge: 'Community',
-      link: '#', // later: /community
+      link: '#',
     },
-  ]
+  ];
 
   return (
-    <div className="app">
+    <div className={`app theme-${theme}`}>
       {/* Header */}
       <header className="header">
         <div className="header-inner">
@@ -59,12 +62,19 @@ function App() {
               About
             </a>
           </nav>
+
+          {/* Theme Switch Buttons */}
+          <div className="theme-buttons">
+            <button onClick={() => setTheme('light')}>🌞 Light</button>
+            <button onClick={() => setTheme('dark')}>🌙 Dark</button>
+            <button onClick={() => setTheme('high-contrast')}>⚡ High Contrast</button>
+          </div>
         </div>
       </header>
 
-      {/* Main content */}
+      {/* Main Content */}
       <main className="main">
-        {/* Hero section */}
+        {/* Hero Section */}
         <section className="hero">
           <div className="hero-inner">
             <div className="hero-text">
@@ -79,9 +89,7 @@ function App() {
 
               <div className="hero-actions">
                 <button className="btn btn-primary">Explore Resources</button>
-                <button className="btn btn-outline">
-                  Learn About Your Rights
-                </button>
+                <button className="btn btn-outline">Learn About Your Rights</button>
               </div>
 
               <p className="hero-disclaimer">
@@ -112,13 +120,12 @@ function App() {
           </div>
         </section>
 
-        {/* How We Can Help section (cards) */}
+        {/* How We Can Help Section */}
         <section className="section">
           <div className="section-header">
             <h2 className="section-title">How We Can Help</h2>
             <p className="section-subtitle">
-              legal information, up-to-date news, and
-              community connection.
+              Legal information, up-to-date news, and community connection.
             </p>
           </div>
 
@@ -136,7 +143,7 @@ function App() {
           </div>
         </section>
 
-        {/* Banner / call-to-action */}
+        {/* Banner Section */}
         <section className="banner">
           <div className="banner-inner">
             <div>
@@ -170,7 +177,7 @@ function App() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
