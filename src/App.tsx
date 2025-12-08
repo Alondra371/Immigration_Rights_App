@@ -1,5 +1,6 @@
 import './App.css';
 import { useTheme } from './ThemeContext';
+//import LegalResources from "./LegalResources";
 
 type Widget = {
   title: string;
@@ -14,11 +15,11 @@ function App() {
   const widgets: Widget[] = [
     {
       title: 'Legal Resources',
-      description:
-        'Access guides, forms, and links to trusted legal aid organizations to help you navigate the immigration process.',
+      description: 'Access guides, forms, and links to trusted legal aid organizations to help you navigate the immigration process.',
       badge: 'Guides & Forms',
-      link: '#',
-    },
+      link: '/legal-resources',
+   },
+
     {
       title: 'News & Policy Updates',
       description:
@@ -49,7 +50,7 @@ function App() {
             <a href="#" className="nav-link nav-link-active">
               Home
             </a>
-            <a href="#" className="nav-link">
+            <a href="/legal-resources" className="nav-link">
               Legal Resources
             </a>
             <a href="#" className="nav-link">
