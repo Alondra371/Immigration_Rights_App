@@ -10,31 +10,6 @@ import About from "./About";
 
 function App() {
   const { theme, setTheme } = useTheme();
-
-  const widgets: Widget[] = [
-    {
-      title: 'Legal Resources',
-      description: 'Access guides, forms, and links to trusted legal aid organizations to help you navigate the immigration process.',
-      badge: 'Guides & Forms',
-      link: '/legal-resources',
-   },
-
-    {
-      title: 'News & Policy Updates',
-      description:
-        'Stay informed about immigration news, policy changes, and community stories that may affect you and your family.',
-      badge: 'News',
-      link: '#',
-    },
-    {
-      title: 'Community Support',
-      description:
-        'Find local events, workshops, and support networks focused on immigrant rights and community empowerment.',
-      badge: 'Community',
-      link: '#',
-    },
-  ];
-
   return (
     <div className={`app theme-${theme}`}>
       {/* Header */}
