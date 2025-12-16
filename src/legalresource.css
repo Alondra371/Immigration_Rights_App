@@ -1,0 +1,105 @@
+/* Page background */
+.legal-page {
+  min-height: 100vh;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(to bottom, #eff6ff, #f3f4f6);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1f2937;
+}
+
+/* Center container */
+.legal-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Header */
+.legal-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.legal-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.header-bar {
+  width: 5rem;
+  height: 4px;
+  background: #2563eb;
+  border-radius: 999px;
+  margin: 1rem auto;
+}
+
+.legal-header p {
+  max-width: 650px;
+  margin: 1.5rem auto 0;
+  font-size: 1.1rem;
+  color: #4b5563;
+}
+
+/* Card grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* Resource card */
+.resource-card {
+  position: relative;
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem 1.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+/* Accent bar */
+.accent-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background: #2563eb;
+  border-radius: 1rem 0 0 1rem;
+}
+
+/* Card text */
+.resource-card h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.resource-card p {
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Link */
+.resource-card a {
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.resource-card a span {
+  margin-left: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.resource-card a:hover span {
+  transform: translateX(4px);
+}
