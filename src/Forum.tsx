@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type PostType = "news" | "event";
 
@@ -12,6 +12,8 @@ export type ForumPost = {
 };
 
 type Filter = "all" | "news" | "events";
+const LS_USER = "forum_current_user";
+const LS_POSTS = "forum_posts";
 
 const initialPosts: ForumPost[] = [
   {
@@ -58,8 +60,15 @@ const initialPosts: ForumPost[] = [
 
 export default function Forum() {
   const [filter, setFilter] = useState<Filter>("all");
-  const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
-  const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [posts, setPosts] = useState<ForumPost[]>(() => {
+  const saved = localStorage.getItem(LS_POSTS);
+  return saved ? JSON.parse(saved) : initialPosts;
+});
+
+const [currentUser, setCurrentUser] = useState<string | null>(() => {
+  return localStorage.getItem(LS_USER);
+});
+
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [loginName, setLoginName] = useState("");
   const [newPostTitle, setNewPostTitle] = useState("");
@@ -80,10 +89,12 @@ export default function Forum() {
     setShowLoginForm(false);
   };
 
-  const handleLogout = () => {
-    setCurrentUser(null);
-    setLoginName("");
-  };
+const handleLogout = () => {
+  setCurrentUser(null);
+  setLoginName("");
+  localStorage.removeItem(LS_USER);
+};
+
 
   const handleAddPost = (event: React.FormEvent) => {
     event.preventDefault();
@@ -104,6 +115,10 @@ export default function Forum() {
       date: formattedDate,
       author: currentUser,
     };
+const handleDeletePost = (id: number) => {
+  if (!confirm("Delete this post?")) return;
+  setPosts((prev) => prev.filter((p) => p.id !== id));
+};
 
     // Newest posts appear at the top
     setPosts((prev) => [newPost, ...prev]);
@@ -267,6 +282,16 @@ export default function Forum() {
               <h3 className="card-title">{post.title}</h3>
               <p className="card-description">{post.body}</p>
               <p className="forum-post-author">Posted by {post.author}</p>
+              {currentUser && currentUser === post.author && (
+                 <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={() => handleDeletePost(post.id)}
+                  >
+                   Delete
+               </button>
+)}
+
             </article>
           ))}
 
@@ -281,3 +306,11 @@ export default function Forum() {
     </div>
   );
 }
+useEffect(() => {
+  if (currentUser) localStorage.setItem(LS_USER, currentUser);
+  else localStorage.removeItem(LS_USER);
+}, [currentUser]);
+
+useEffect(() => {
+  localStorage.setItem(LS_POSTS, JSON.stringify(posts));
+}, [posts]);
