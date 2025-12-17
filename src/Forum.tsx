@@ -12,6 +12,7 @@ export type ForumPost = {
 };
 
 type Filter = "all" | "news" | "events";
+
 const LS_USER = "forum_current_user";
 const LS_POSTS = "forum_posts";
 
@@ -21,59 +22,95 @@ const initialPosts: ForumPost[] = [
     title: "New Immigration Policy Changes Announced for 2025",
     body: "Federal government announces significant updates to asylum processing procedures and wait times.",
     type: "news",
-    date: "November 1, 2025",
+    date: "Nov 1, 2025",
     author: "Legal Aid Network",
   },
   {
     id: 2,
-    title: "Supreme Court to Hear Major Immigration Case",
-    body: "A landmark case could reshape immigration law and affect millions of undocumented immigrants.",
-    type: "news",
-    date: "October 25, 2025",
-    author: "Staff Reporter",
-  },
-  {
-    id: 3,
-    title: "Free Legal Clinic - Los Angeles",
+    title: "Free Legal Clinic – Los Angeles",
     body: "Walk-in consultations with immigration attorneys. No appointment needed.",
     type: "event",
-    date: "November 15, 2025",
+    date: "Nov 15, 2025",
     author: "Community Partner",
-  },
-  {
-    id: 4,
-    title: "Citizenship Application Workshop",
-    body: "Step-by-step guidance on completing the N-400 form and preparing for the citizenship interview.",
-    type: "event",
-    date: "November 20, 2025",
-    author: "Local Nonprofit",
-  },
-  {
-    id: 5,
-    title: "Border Processing Times Reduced by 40%",
-    body: "New streamlined procedures show significant improvements in asylum application processing.",
-    type: "news",
-    date: "October 5, 2025",
-    author: "Policy Desk",
   },
 ];
 
 export default function Forum() {
   const [filter, setFilter] = useState<Filter>("all");
-  const [posts, setPosts] = useState<ForumPost[]>(() => {
-  const saved = localStorage.getItem(LS_POSTS);
-  return saved ? JSON.parse(saved) : initialPosts;
-});
 
-const [currentUser, setCurrentUser] = useState<string | null>(() => {
-  return localStorage.getItem(LS_USER);
-});
+  const [posts, setPosts] = useState<ForumPost[]>(() => {
+    const saved = localStorage.getItem(LS_POSTS);
+    return saved ? JSON.parse(saved) : initialPosts;
+  });
+
+  const [currentUser, setCurrentUser] = useState<string | null>(() => {
+    return localStorage.getItem(LS_USER);
+  });
 
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [loginName, setLoginName] = useState("");
+
   const [newPostTitle, setNewPostTitle] = useState("");
   const [newPostBody, setNewPostBody] = useState("");
   const [newPostType, setNewPostType] = useState<PostType>("news");
+
+  /* -------------------- persistence -------------------- */
+
+  useEffect(() => {
+    if (currentUser) localStorage.setItem(LS_USER, currentUser);
+    else localStorage.removeItem(LS_USER);
+  }, [currentUser]);
+
+  useEffect(() => {
+    localStorage.setItem(LS_POSTS, JSON.stringify(posts));
+  }, [posts]);
+
+  /* -------------------- handlers -------------------- */
+
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginName.trim()) return;
+    setCurrentUser(loginName.trim());
+    setShowLoginForm(false);
+    setLoginName("");
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem(LS_USER);
+  };
+
+  const handleAddPost = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser || !newPostTitle.trim() || !newPostBody.trim()) return;
+
+    const date = new Date().toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+    const newPost: ForumPost = {
+      id: Date.now(),
+      title: newPostTitle.trim(),
+      body: newPostBody.trim(),
+      type: newPostType,
+      date,
+      author: currentUser,
+    };
+
+    setPosts((prev) => [newPost, ...prev]);
+    setNewPostTitle("");
+    setNewPostBody("");
+    setNewPostType("news");
+  };
+
+  const handleDeletePost = (id: number) => {
+    if (!confirm("Delete this post?")) return;
+    setPosts((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  /* -------------------- derived -------------------- */
 
   const visiblePosts = posts.filter((post) => {
     if (filter === "all") return true;
@@ -82,235 +119,129 @@ const [currentUser, setCurrentUser] = useState<string | null>(() => {
     return true;
   });
 
-  const handleLoginSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!loginName.trim()) return;
-    setCurrentUser(loginName.trim());
-    setShowLoginForm(false);
-  };
-
-const handleLogout = () => {
-  setCurrentUser(null);
-  setLoginName("");
-  localStorage.removeItem(LS_USER);
-};
-
-
-  const handleAddPost = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!currentUser || !newPostTitle.trim() || !newPostBody.trim()) return;
-
-    const now = new Date();
-    const formattedDate = now.toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-
-    const newPost: ForumPost = {
-      id: posts.length + 1,
-      title: newPostTitle.trim(),
-      body: newPostBody.trim(),
-      type: newPostType,
-      date: formattedDate,
-      author: currentUser,
-    };
-const handleDeletePost = (id: number) => {
-  if (!confirm("Delete this post?")) return;
-  setPosts((prev) => prev.filter((p) => p.id !== id));
-};
-
-    // Newest posts appear at the top
-    setPosts((prev) => [newPost, ...prev]);
-
-    setNewPostTitle("");
-    setNewPostBody("");
-    setNewPostType("news");
-  };
-
   const renderFilterButton = (value: Filter, label: string) => (
     <button
       type="button"
+      className={`btn btn-outline ${filter === value ? "btn-primary" : ""}`}
       onClick={() => setFilter(value)}
-      className={
-        "btn btn-outline" + (filter === value ? " btn-primary" : "")
-      }
     >
       {label}
     </button>
   );
 
+  /* -------------------- UI -------------------- */
+
   return (
     <div className="forum-page">
       <section className="section">
-        <div className="section-header">
-          <h1 className="section-title">Community Forum</h1>
-          <p className="section-subtitle">
-            Read and share news and events from immigrant communities and
-            advocacy organizations.
-          </p>
-        </div>
+        <h1 className="section-title">Community Forum</h1>
+        <p className="section-subtitle">
+          Share immigration news and community events.
+        </p>
 
         {/* Filters */}
         <div className="forum-filters">
-          <span className="forum-filters-label">Filter:</span>
-          <div className="forum-filters-buttons">
-            {renderFilterButton("all", "All")}
-            {renderFilterButton("news", "News")}
-            {renderFilterButton("events", "Events")}
-          </div>
+          {renderFilterButton("all", "All")}
+          {renderFilterButton("news", "News")}
+          {renderFilterButton("events", "Events")}
         </div>
 
-        {/* Sign in / profile + Add Post */}
-        <div className="widgets-grid">
-          <article className="widget-card">
-            <h2 className="card-title">
-              {currentUser ? "You are signed in" : "Sign in to share updates"}
-            </h2>
-            <p className="card-description">
-              Create a lightweight account in this demo to post news and events
-              to the forum. This is front-end only; nothing is saved to a
-              server.
-            </p>
+        {/* Auth */}
+        <div className="widget-card">
+          {!currentUser ? (
+            <>
+              {!showLoginForm && (
+                <button
+                  className="btn btn-primary"
+                  onClick={() => setShowLoginForm(true)}
+                >
+                  Sign In
+                </button>
+              )}
 
-            {!currentUser && !showLoginForm && (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => setShowLoginForm(true)}
-              >
-                Sign In
-              </button>
-            )}
-
-            {!currentUser && showLoginForm && (
-              <form className="forum-form" onSubmit={handleLoginSubmit}>
-                <label className="form-field">
-                  <span className="form-label">Name</span>
+              {showLoginForm && (
+                <form onSubmit={handleLoginSubmit}>
                   <input
-                    type="text"
+                    className="form-input"
                     value={loginName}
                     onChange={(e) => setLoginName(e.target.value)}
-                    className="form-input"
-                    placeholder="Your name or nickname"
+                    placeholder="Your name"
                   />
-                </label>
-                <button type="submit" className="btn btn-primary">
-                  Continue
-                </button>
-              </form>
-            )}
-
-            {currentUser && (
-              <div className="forum-user">
-                <p className="forum-user-name">
-                  Signed in as <strong>{currentUser}</strong>
-                </p>
-                <button
-                  type="button"
-                  className="btn btn-outline"
-                  onClick={handleLogout}
-                >
-                  Sign Out
-                </button>
-              </div>
-            )}
-          </article>
-
-          <article className="widget-card">
-            <h2 className="card-title">Add a post</h2>
-            {!currentUser ? (
-              <p className="card-description">
-                Please sign in first to add a post.
+                  <button className="btn btn-primary">Continue</button>
+                </form>
+              )}
+            </>
+          ) : (
+            <>
+              <p>
+                Signed in as <strong>{currentUser}</strong>
               </p>
-            ) : (
-              <form className="forum-form" onSubmit={handleAddPost}>
-                <label className="form-field">
-                  <span className="form-label">Title</span>
-                  <input
-                    type="text"
-                    value={newPostTitle}
-                    onChange={(e) => setNewPostTitle(e.target.value)}
-                    className="form-input"
-                    placeholder="Short headline for your post"
-                  />
-                </label>
-
-                <label className="form-field">
-                  <span className="form-label">Type</span>
-                  <select
-                    value={newPostType}
-                    onChange={(e) =>
-                      setNewPostType(e.target.value as PostType)
-                    }
-                    className="form-input"
-                  >
-                    <option value="news">News</option>
-                    <option value="event">Event</option>
-                  </select>
-                </label>
-
-                <label className="form-field">
-                  <span className="form-label">Body</span>
-                  <textarea
-                    value={newPostBody}
-                    onChange={(e) => setNewPostBody(e.target.value)}
-                    className="form-input"
-                    rows={4}
-                    placeholder="Share details, links, or important info."
-                  />
-                </label>
-
-                <button type="submit" className="btn btn-primary">
-                  Post
-                </button>
-              </form>
-            )}
-          </article>
+              <button className="btn btn-outline" onClick={handleLogout}>
+                Sign Out
+              </button>
+            </>
+          )}
         </div>
 
-        {/* Posts list */}
+        {/* Add post */}
+        {currentUser && (
+          <form className="widget-card" onSubmit={handleAddPost}>
+            <input
+              className="form-input"
+              value={newPostTitle}
+              onChange={(e) => setNewPostTitle(e.target.value)}
+              placeholder="Post title"
+            />
+
+            <select
+              className="form-input"
+              value={newPostType}
+              onChange={(e) => setNewPostType(e.target.value as PostType)}
+            >
+              <option value="news">News</option>
+              <option value="event">Event</option>
+            </select>
+
+            <textarea
+              className="form-input"
+              rows={4}
+              value={newPostBody}
+              onChange={(e) => setNewPostBody(e.target.value)}
+              placeholder="Post content"
+            />
+
+            <button className="btn btn-primary">Post</button>
+          </form>
+        )}
+
+        {/* Posts */}
         <div className="forum-list">
           {visiblePosts.map((post) => (
-            <article key={post.id} className="widget-card forum-post-card">
-              <div className="forum-post-meta">
-                <span className="forum-post-chip">
-                  {post.type === "news" ? "News" : "Event"}
-                </span>
-                <span className="forum-post-date">{post.date}</span>
-              </div>
-              <h3 className="card-title">{post.title}</h3>
-              <p className="card-description">{post.body}</p>
+            <article key={post.id} className="widget-card">
+              <span className="forum-post-chip">
+                {post.type === "news" ? "News" : "Event"}
+              </span>
+              <h3>{post.title}</h3>
+              <p>{post.body}</p>
               <p className="forum-post-author">Posted by {post.author}</p>
-              {currentUser && currentUser === post.author && (
-                 <button
-                  type="button"
+
+              {currentUser === post.author && (
+                <button
                   className="btn btn-outline"
                   onClick={() => handleDeletePost(post.id)}
-                  >
-                   Delete
-               </button>
-)}
-
+                >
+                  Delete
+                </button>
+              )}
             </article>
           ))}
 
           {visiblePosts.length === 0 && (
-            <p className="forum-empty">
-              No posts match this filter yet. Try switching to a different
-              filter or add a new post.
-            </p>
+            <p className="forum-empty">No posts yet.</p>
           )}
         </div>
       </section>
     </div>
   );
 }
-useEffect(() => {
-  if (currentUser) localStorage.setItem(LS_USER, currentUser);
-  else localStorage.removeItem(LS_USER);
-}, [currentUser]);
-
-useEffect(() => {
-  localStorage.setItem(LS_POSTS, JSON.stringify(posts));
-}, [posts]);
+ 
