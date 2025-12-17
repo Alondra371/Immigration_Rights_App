@@ -3,10 +3,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,19 +11,19 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: var(--accent);
+  text-decoration: none;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--primary);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  color: var(--text-main);
+  background: var(--bg-page);
 }
 
 h1 {
@@ -37,32 +33,80 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--accent);
+  color: #ffffff;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border-color: var(--primary-dark);
+  background-color: var(--primary);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:focus,
+button:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 2px;}
+
+:root {
+  --bg-page: linear-gradient(to bottom, #eff6ff, #f3f4f6);
+
+  --text-main: #1f2937;
+  --text-muted: #374151;
+
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+
+  --accent: #2563eb;
+}
+
+/* Dark mode */
+body.dark {
+  --bg-page: linear-gradient(to bottom, #020617, #020617);
+
+  --text-main: #f9fafb;
+  --text-muted: #d1d5db;
+
+  --card-bg: #020617;
+  --card-border: #1f2937;
+
+  --accent: #60a5fa;
+}
+
+/* High contrast mode */
+body.high-contrast {
+  --bg-page: #000000;
+
+  --text-main: #ffffff;
+  --text-muted: #ffffff;
+
+  --card-bg: #000000;
+  --card-border: #ffffff;
+
+  --accent: #ffff00;
+}
+
+/* Ensure footer is always visible in dark mode */
+body.dark footer {
+  background-color: #020617;
+  color: #ffffff;
+  border-top: 1px solid #1f2937;
+}
+
+/* Ensure footer is always visible in high contrast mode */
+body.high-contrast footer {
+  background-color: #000000;
+  color: #ffffff;
+  border-top: 2px solid #ffffff;
+}
+
+/* Footer links */
+body.dark footer a,
+body.high-contrast footer a {
+  color: var(--accent);
 }
